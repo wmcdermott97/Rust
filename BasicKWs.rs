@@ -1,6 +1,6 @@
 fn main() {
   println!("{}", gcd(14, 10));
-  println!("{}", euler_totient(10));
+  println!("{}", euler_totient(127));
 }
 
 // Demonstrate the if keyword
@@ -26,7 +26,7 @@ fn gcd(mut a: i32, mut b: i32) -> i32 {
 // Demonstrate the for keyword
 fn euler_totient(n: i32) -> i32 {
   let mut sum = 0;
-  for i in 1..(n - 1) {
+  for i in 1..n {
     if gcd(i, n) == 1 {
       sum += 1;
     }
