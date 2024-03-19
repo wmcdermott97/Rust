@@ -1,6 +1,5 @@
 fn main() {
-  println!("{}", gcd(14, 10));
-  println!("{}", euler_totient(127));
+  println!("{}", mod_exp(5, 2, 23));
 }
 
 // Demonstrate the if keyword
@@ -30,4 +29,21 @@ fn euler_totient(n: i32) -> i32 {
     }
   }
   return sum;
+}
+
+// writing some number theory
+fn mod_exp(b: i32, x: i32, p: i32) -> i32 {
+  let mut y = 1;
+  let mut pow = b;
+  let mut exp = x;
+  while exp > 0 {
+    if exp % 2 == 1 {
+      y *= pow;
+      y %= p;
+    }
+    pow *= pow;
+    pow %= p;
+    exp /= 2;
+  }
+  return y;
 }
