@@ -4,23 +4,21 @@ fn main() {
 }
 
 // Demonstrate the if keyword
-fn abs(mut x: i32) -> i32 {
+fn abs(x: i32) -> i32 {
   if x < 0 {
-    x = -x;
+    return -x;
   }
   return x;
 }
 
 // Demonstrate the while keyword
-fn gcd(mut a: i32, mut b: i32) -> i32 {
-  a = abs(a);
-  b = abs(b);
-  while b != 0 {
-    let s = a % b;
-    a = b;
-    b = s;
+fn gcd(a: i32, b: i32) -> i32 {
+  let mut x = abs(a);
+  let mut y = abs(b);
+  while y != 0 {
+    (x, y) = (y, x % y)
   }
-  return a;
+  return x;
 }
 
 // Demonstrate the for keyword
