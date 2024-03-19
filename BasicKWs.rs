@@ -1,5 +1,7 @@
+// Entry point for Rust
+// (3, 5), (6, 7), (10, 11), (16, 17), (22, 23), (2, 29)
 fn main() {
-  println!("{}", mod_exp(5, 2, 23));
+  square_prm()
 }
 
 // Demonstrate the if keyword
@@ -11,9 +13,9 @@ fn abs(x: i32) -> i32 {
 }
 
 // Demonstrate the while keyword
-fn gcd(a: i32, b: i32) -> i32 {
-  let mut x = abs(a);
-  let mut y = abs(b);
+fn gcd(a: u32, b: u32) -> u32 {
+  let mut x = a;
+  let mut y = b;
   while y != 0 {
     (x, y) = (y, x % y)
   }
@@ -21,7 +23,7 @@ fn gcd(a: i32, b: i32) -> i32 {
 }
 
 // Demonstrate the for keyword
-fn euler_totient(n: i32) -> i32 {
+fn euler_totient(n: u32) -> u32 {
   let mut sum = 0;
   for i in 1..n {
     if gcd(i, n) == 1 {
@@ -31,19 +33,28 @@ fn euler_totient(n: i32) -> i32 {
   return sum;
 }
 
-// writing some number theory
-fn mod_exp(b: i32, x: i32, p: i32) -> i32 {
+// Computes b^x modulo n
+fn mod_exp(b: u32, x: u32, n: u32) -> u32 {
   let mut y = 1;
   let mut pow = b;
   let mut exp = x;
   while exp > 0 {
     if exp % 2 == 1 {
-      y *= pow;
-      y %= p;
+      y *= pow; y %= n;
     }
-    pow *= pow;
-    pow %= p;
+    pow *= pow; pow %= n;
     exp /= 2;
   }
   return y;
+}
+
+fn square_prm() {
+  for p in [3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53] {
+    for b in 2..(p - 1) {
+      let val = mod_exp(b, p - 1, p * p);
+      if val / p == 1 {
+        println!("({}, {})", b, p)
+      }
+    }
+  }
 }
