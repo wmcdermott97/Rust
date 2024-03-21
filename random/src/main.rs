@@ -1,7 +1,8 @@
 
 fn main() {
-  println!("{}", compute_irrational(100));
+  println!("{}", compute_irrational(46000));
 }
+
 fn compute_irrational(n: u32) -> String {
   let mut num: String = "0.00".to_string();
   let mut ones_pos: usize;
@@ -9,6 +10,7 @@ fn compute_irrational(n: u32) -> String {
     ones_pos = num.find('.').unwrap() - 1;
     num = string_add_at(num, ones_pos, 1);
     num = string_flatten(num);
+    num = string_complete(num);
     println!("{} gives {}", i + 1, num);
   }
   return num;
@@ -49,7 +51,6 @@ fn string_flatten(num: String) -> String {
   let mut num_spl = num.clone();
   let (num1, rest) = num_spl.split_at_mut(dec_pos);
   let (_dec, num2) = rest.split_at_mut(1);
-  // println!("{}, {}, {}", first, ones, second); // nice debug
   let mut new_num = num1.to_string() + &num2;
   // since we failed to verify, some character is greater than '2' - make everything smaller
   let mut pos: usize = new_num.find(|c: char| c > '2').unwrap();
@@ -73,7 +74,46 @@ fn string_flatten(num: String) -> String {
 }
 
 fn string_complete(num: String) -> String {
-  let mut new_num: String = num.clone();
-
-  return num;
+  // remove decimal
+  let mut dec_pos: usize = num.find('.').unwrap();
+  let mut num_spl = num.clone();
+  let (num1, rest) = num_spl.split_at_mut(dec_pos);
+  let (_dec, num2) = rest.split_at_mut(1);
+  let mut new_num = num1.to_string() + &num2;
+  // setup for twos loop
+  let l: usize = new_num.len();
+  let iter_num: String = new_num.clone();
+  let mut iter = iter_num.chars().rev();
+  let mut curr: char = iter.next().unwrap();
+  let mut last: char = curr.clone();
+  // loop through string backwards, and add up values if necessary.
+  for rev_pos in 2..l + 1 {
+    curr = iter.next().unwrap();
+    let pos: usize;
+    if curr == '2' && last == '2' && rev_pos == l {
+      // add a zero
+      new_num = "0".to_string() + &new_num;
+      dec_pos += 1;
+      pos = l - rev_pos;
+    }
+    else if rev_pos != l {
+      pos = l - rev_pos - 1;
+    }
+    else {
+        pos = 10000000;
+    }
+    if curr == '2' && last == '2' {
+      // move the twos forward
+      new_num = string_add_at(new_num, pos, 1);
+      new_num = string_add_at(new_num, pos + 1, -2);
+      new_num = string_add_at(new_num, pos + 2, -2);
+      last = '0';
+    }
+    else {
+      last = curr;
+    }
+  }
+  // re-add decimal
+  let (new1, new2) = new_num.split_at_mut(dec_pos);
+  return string_flatten(new1.to_string() + "." + &new2);
 }
